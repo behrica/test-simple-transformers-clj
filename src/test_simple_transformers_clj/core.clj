@@ -17,8 +17,8 @@
 
 ;; This points to python executable and library as it is created by the Dockerfile
 
-;(py/initialize! :python-executable "/home/carsten/.conda/envs/transformers-cud10.2/bin/python3.6"                                                                                                  
-;                :library-path "/home/carsten/.conda/envs/transformers-cud10.2/lib/libpython3.6m.so")
+                                        ;(py/initialize! :python-executable "/home/carsten/.conda/envs/transformers-cud10.2/bin/python3.6"                                                                                                  
+                                        ;                :library-path "/home/carsten/.conda/envs/transformers-cud10.2/lib/libpython3.6m.so")
 
 (py/initialize! :python-executable "/root/miniconda3/envs/transformers/bin/python"
                 :library-path "/root/miniconda3/envs/transformers/lib/libpython3.8.so"
@@ -37,29 +37,25 @@
 (py. transformers-logger setLevel logging/DEBUG)
 
 
-;; This is required for now. See discussion here: 
-;; https://github.com/clj-python/libpython-clj/issues/93
-(py/with-gil-stack-rc-context
 
-  (def train-data  [["Example sentence belonging to class 1"  1]
-                    ["Example sentence belonging to class 0"  0]])
+(def train-data  [["Example sentence belonging to class 1"  1]
+                  ["Example sentence belonging to class 0"  0]])
 
-  (def eval-data [["Example eval sentence belonging to class 1"  1]
-                  ["Example eval sentence belonging to class 0" 0]])
+(def eval-data [["Example eval sentence belonging to class 1"  1]
+                ["Example eval sentence belonging to class 0" 0]])
 
 
 
-  (def eval-df  (pd/DataFrame eval-data))
-  (def train-df  (pd/DataFrame train-data))
+(def eval-df  (pd/DataFrame eval-data))
+(def train-df  (pd/DataFrame train-data))
 
-  (def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
-                                  :args {:overwrite_output_dir true
-                                         :process_count 1
-                                         :use_multiprocessing false
-                                         } ))
-1  (py. model train_model train-df)
-  (py. model eval_model eval-df)
+(def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
+                                :args {:overwrite_output_dir true
+                                       :process_count 1
+                                       :use_multiprocessing false
+                                       } ))
+(py. model train_model train-df)
+(py. model eval_model eval-df)
                                         ;(println
-  ; (->jvm ))
+                                        ; (->jvm ))
 
-  )

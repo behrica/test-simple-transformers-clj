@@ -36,9 +36,9 @@
 (println (java.util.Date.) "2")
 
 
-(logging/basicConfig :level logging/INFO)
+(logging/basicConfig :level logging/DEBUG)
 (def transformers-logger (logging/getLogger "transformers"))
-(py. transformers-logger setLevel logging/INFO)
+(py. transformers-logger setLevel logging/DEBUG)
 
 (println (java.util.Date.) "3")
 

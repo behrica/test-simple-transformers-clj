@@ -1,4 +1,3 @@
-(println (java.util.Date.) "start")
 (ns test-simple-transformers-clj.core
   (:require 
    [libpython-clj.python   :refer [py. py.. py.-
@@ -15,16 +14,13 @@
     :as py]
    )
   )
-(println (java.util.Date.) "0")
+
+;; This points to python executable and library as it is created by the Dockerfile
 
 (py/initialize! :python-executable "/root/miniconda3/envs/transformers/bin/python"
                 :library-path "/root/miniconda3/envs/transformers/lib/libpython3.8.so"
-                :no-io-redirect? true
+                :no-io-redirect? true   ;without this, the python logging is not shown
                 )
-
-                                        ;(py/initialize! :python-executable "/home/carsten/.conda/envs/transformers-cud10.2/bin/python3.6"
-                                        ;                :library-path "/home/carsten/.conda/envs/transformers-cud10.2/lib/libpython3.6m.so")
-(println (java.util.Date.) "1")
 
 (require '[libpython-clj.require :refer [require-python]])
 
@@ -33,15 +29,13 @@
 (require-python '[logging])
 
 
-(println (java.util.Date.) "2")
-
-
 (logging/basicConfig :level logging/DEBUG)
 (def transformers-logger (logging/getLogger "transformers"))
 (py. transformers-logger setLevel logging/DEBUG)
 
-(println (java.util.Date.) "3")
 
+;; This is required for now. See discussion here: 
+;; https://github.com/clj-python/libpython-clj/issues/93
 (py/with-gil-stack-rc-context
 
   (def train-data  [["Example sentence belonging to class 1"  1]
@@ -50,29 +44,13 @@
   (def eval-data [["Example eval sentence belonging to class 1"  1]
                   ["Example eval sentence belonging to class 0" 0]])
 
-  (println (java.util.Date.) "4")
 
 
   (def eval-df  (pd/DataFrame eval-data))
   (def train-df  (pd/DataFrame train-data))
 
-  (def n "single")
-                                        ;(dotimes [n 10]
-                                        ;(println "loop " n)
-  (println (java.util.Date.) n " --- " "5 - before ClassificationModel")
   (def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
                                   :args {:overwrite_output_dir true} ))
-
-  (println (java.util.Date.) n " --- " "6 - before train_model")
   (py. model train_model train-df)
-
-  (println (java.util.Date.) n " --- " "before eval 7")
   (println
-   (->jvm (py. model eval_model eval-df)))
-
-  )
-                                        ;(println (java.util.Date.) n " --- " "before GC")
-                                        ;(py/gc!)
-                                        ;(println (java.util.Date.) n " --- " "end")
-
-                                        ;        )
+   (->jvm (py. model eval_model eval-df))))

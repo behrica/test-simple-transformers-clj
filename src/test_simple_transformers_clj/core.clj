@@ -55,10 +55,9 @@
   (def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
                                   :args {:overwrite_output_dir true
                                          :process_count 1
-                                         :silent true
                                          :use_multiprocessing false
                                          } ))
-  (py. model train_model train-df)
+1  (py. model train_model train-df)
   (py. model eval_model eval-df)
                                         ;(println
   ; (->jvm ))

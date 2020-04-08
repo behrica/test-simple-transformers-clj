@@ -16,10 +16,6 @@
   )
 
 ;; This points to python executable and library as it is created by the Dockerfile
-
-                                        ;(py/initialize! :python-executable "/home/carsten/.conda/envs/transformers-cud10.2/bin/python3.6"                                                                                                  
-                                        ;                :library-path "/home/carsten/.conda/envs/transformers-cud10.2/lib/libpython3.6m.so")
-
 (py/initialize! :python-executable "/root/miniconda3/envs/transformers/bin/python"
                 :library-path "/root/miniconda3/envs/transformers/lib/libpython3.8.so"
                 :no-io-redirect? true   ;without this, the python logging is not shown
@@ -51,11 +47,9 @@
 
 (def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
                                 :args {:overwrite_output_dir true
-                                       :process_count 1
-                                       :use_multiprocessing false
+                                       :process_count 1                  ;; important for libpython-clj
+                                       :use_multiprocessing false        ;; important for libpython-clj
                                        } ))
 (py. model train_model train-df)
 (py. model eval_model eval-df)
-                                        ;(println
-                                        ; (->jvm ))
 

@@ -54,7 +54,7 @@
 (def eval-df  (pd/DataFrame eval-data))
 (def train-df  (pd/DataFrame train-data))
 
-;(def n "single")
+(def n "single")
                                         ;(dotimes [n 10]
 ;(println "loop " n)
 (println (java.util.Date.) n " --- " "5 - before ClassificationModel")

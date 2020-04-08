@@ -18,7 +18,9 @@
 (println (java.util.Date.) "0")
 
 (py/initialize! :python-executable "/root/miniconda3/envs/transformers/bin/python"
-                :library-path "/root/miniconda3/envs/transformers/lib/libpython3.8.so")
+                :library-path "/root/miniconda3/envs/transformers/lib/libpython3.8.so"
+                :no-io-redirect? true
+                )
 
                                         ;(py/initialize! :python-executable "/home/carsten/.conda/envs/transformers-cud10.2/bin/python3.6"
                                         ;                :library-path "/home/carsten/.conda/envs/transformers-cud10.2/lib/libpython3.6m.so")

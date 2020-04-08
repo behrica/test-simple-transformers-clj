@@ -42,36 +42,37 @@
 
 (println (java.util.Date.) "3")
 
+(py/with-gil-stack-rc-context
+
+  (def train-data  [["Example sentence belonging to class 1"  1]
+                    ["Example sentence belonging to class 0"  0]])
+
+  (def eval-data [["Example eval sentence belonging to class 1"  1]
+                  ["Example eval sentence belonging to class 0" 0]])
+
+  (println (java.util.Date.) "4")
 
 
-(def train-data  [["Example sentence belonging to class 1"  1]
-                  ["Example sentence belonging to class 0"  0]])
+  (def eval-df  (pd/DataFrame eval-data))
+  (def train-df  (pd/DataFrame train-data))
 
-(def eval-data [["Example eval sentence belonging to class 1"  1]
-                ["Example eval sentence belonging to class 0" 0]])
-
-(println (java.util.Date.) "4")
-
-
-(def eval-df  (pd/DataFrame eval-data))
-(def train-df  (pd/DataFrame train-data))
-
-(def n "single")
+  (def n "single")
                                         ;(dotimes [n 10]
-;(println "loop " n)
-(println (java.util.Date.) n " --- " "5 - before ClassificationModel")
-(def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
-                                :args {:overwrite_output_dir true} ))
+                                        ;(println "loop " n)
+  (println (java.util.Date.) n " --- " "5 - before ClassificationModel")
+  (def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
+                                  :args {:overwrite_output_dir true} ))
 
-(println (java.util.Date.) n " --- " "6 - before train_model")
-(py. model train_model train-df)
+  (println (java.util.Date.) n " --- " "6 - before train_model")
+  (py. model train_model train-df)
 
-(println (java.util.Date.) n " --- " "before eval 7")
-(->jvm (py. model eval_model eval-df))
+  (println (java.util.Date.) n " --- " "before eval 7")
+  (println
+   (->jvm (py. model eval_model eval-df)))
 
-
-;(println (java.util.Date.) n " --- " "before GC")
-;(py/gc!)
-;(println (java.util.Date.) n " --- " "end")
+  )
+                                        ;(println (java.util.Date.) n " --- " "before GC")
+                                        ;(py/gc!)
+                                        ;(println (java.util.Date.) n " --- " "end")
 
                                         ;        )

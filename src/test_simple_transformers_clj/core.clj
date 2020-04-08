@@ -47,7 +47,6 @@
 
 (def model (ClassificationModel "roberta"  "roberta-base" :use_cuda false
                                 :args {:overwrite_output_dir true
-                                       :process_count 1                  ;; important for libpython-clj
                                        :use_multiprocessing false        ;; important for libpython-clj
                                        } ))
 (py. model train_model train-df)
